@@ -1,0 +1,16 @@
+.username {
+  cursor: pointer;
+
+  margin-left: 2%;
+}
+.profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: -20px;
+  /* margin-bottom: 2px; */
+  display: inline-block;
+}
+.time{
+  position:relative;
+}

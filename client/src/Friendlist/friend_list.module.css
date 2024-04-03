@@ -1,0 +1,6 @@
+.friend_list {
+  overflow-y: scroll;
+}
+.user{
+  display: flex;
+}

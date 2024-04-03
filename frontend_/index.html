@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>hello</h1>
+    <button id="create_user">create user</button>
+    <button id="button">button</button>
+    <code id="json"></code>
+    <form id="form">
+      <span>Username:</span>
+      <input placeholder="Username" type="text" name="username" id="username" />
+      <br />
+      <span>description</span>
+      <input
+        placeholder="Description"
+        type="text"
+        name="description"
+        id="description" />
+      <br />
+
+      <span>media</span>
+      <input type="file" name="photo" id="photo">
+      <input type="submit" value="Submit" />
+      <p>this is for send friend reqs</p>
+      <div id="users"></div>
+      <p>this is to view profiles of friends</p>
+    </form> 
+    <span >Post id</span>
+    <input type="text" id="post_id" placeholder="Post id to comment">
+    <span>comment</span>
+    <input type="text" id="comment" name="comment" placeholder="Comment" />
+    <span>commentor</span>
+    <input type="text" id="commentor" placeholder="Commentor">
+    <input type="button" value="Comment" id="post_comment"> 
+    <div id="friends"></div>
+    <div id="posts"></div>
+    <input type="button" id="dummy_user" value="create random user">
+    <input type="button" id="dummy_post" value="create random post">
+    <input type="button" id="dummy_comment" value="create random comment">
+  </body>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="index.js"></script>
+</html>
