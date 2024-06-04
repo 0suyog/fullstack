@@ -1,10 +1,10 @@
 import styles from "./Comment.module.css";
 import Comment_pic from "../assets/comment.png";
 import UserwProfile from "../usernameWithProfile/username_with_pofile";
-function Comment_body({ commentor, comment }) {
+function Comment_body({ comment,commentor,commentor_id }) {
   return (
     <div className={styles.commentContainer}>
-      <UserwProfile uname={commentor} />
+      <UserwProfile uname={commentor} id={commentor_id} />
       <p className={styles.comment}>{comment}</p>
     </div>
   );

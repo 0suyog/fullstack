@@ -13,7 +13,9 @@ function App() {
 
   };
   function login(username) {
-    setUsesrname(username);
+    setUsesrname(username._id);
+    localStorage.setItem("id", username._id)
+    console.log(username._id)
   }
 
   return username ? (

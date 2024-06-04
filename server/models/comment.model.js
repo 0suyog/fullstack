@@ -4,9 +4,12 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema({
   post: {
     type: mongoose.Types.ObjectId,
-    ref: "posts",
+    ref: "post",
   },
-  commentor: String,
+  commentor: {
+    type: mongoose.Types.ObjectId,
+    ref:"user"
+  },
   comment: String,
   date: {
     type: Date,
