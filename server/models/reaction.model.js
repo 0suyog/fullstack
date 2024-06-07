@@ -4,8 +4,8 @@ const reactionschema = new Schema({
     reaction: {
         type: Number,
         default: 0,
-        max: 3,
-        min:0
+        max: 1,
+        min:-1
     },
     parent:String
     ,reactor: {

@@ -38,9 +38,9 @@ async function socketfunc(socket) {
         let posts = await Post.find({ uploader: { $in: friendlist.friends } })
             .populate("uploader")
             .populate({ path: "comments", populate: { path: "commentor" } })
-            .populate({path:"reactions",match:{reactor:id}})
+            .populate({ path: "reactions", match: { reactor: id } })
             .exec();
-        
+
         socket.emit("initial_post", posts);
     });
 
@@ -54,9 +54,19 @@ async function socketfunc(socket) {
         // console.log(user.posts);
         post.save();
     });
-    socket.on("liked", (uid, post_id, reactionid) => {
+    socket.on("liked", (uid, post_id, reactionid, setReactionDetails) => {
         if (reactionid) {
-            Reaction.findByIdAndUpdate(reactionid, { reaction: 1 }).exec();
+            Reaction.findById(reactionid, (err, document) => {
+                if (document.reaction == -1) {
+                    document.reaction = 1;
+                    document.save().then((err, document) => {
+                        Post.findByIdAndUpdate(post_id, { $inc: { likes: 1, dislikes: -1 } });
+                        setReactionDetails(document);
+                    });
+                }
+            }).exec();
+
+            // Reaction.findByIdAndUpdate(reactionid, { reaction: 1 }).exec()
         } else {
             const reaction = new Reaction({
                 reaction: 1,
@@ -64,10 +74,60 @@ async function socketfunc(socket) {
                 reactor: uid,
             });
             reaction.save().then((data) => {
-                console.log(uid+" "+post_id+" "+reactionid);
-                Post.findByIdAndUpdate(post_id, { $push: { reactions: data._id } ,$inc:{likes:1}}).exec();
+                console.log(uid + " " + post_id + " " + reactionid);
+                Post.findByIdAndUpdate(post_id, {
+                    $push: { reactions: data._id },
+                    $inc: { likes: 1 },
+                }).exec();
+                setReactionDetails(data);
             });
         }
+    });
+    socket.on("disliked", (uid, post_id, reactionid, setReactionDetails) => {
+        if (reactionid) {
+            console.log(reactionid);
+            Reaction.findById(reactionid)
+                .exec()
+                .then((document) => {
+                    if (document.reaction == 1) {
+                        document.reaction = -1;
+                        Post.findByIdAndUpdate(post_id, {
+                            $inc: { dislikes: 1, likes: -1 },
+                        }).exec();
+                        setReactionDetails(document);
+                    }
+                });
+            
+        } else {
+            const reaction = new Reaction({
+                reaction: -1,
+                parent: String(post_id),
+                reactor: uid,
+            });
+            reaction.save().then((data) => {
+                Post.findByIdAndUpdate(post_id, {
+                    $push: { reactions: data._id },
+                    $inc: { dislikes: 1 },
+                });
+            });
+        }
+    });
+    socket.on("unreacted", (uid, post_id, reactionid) => {
+        console.log(reactionid);
+        Reaction.findByIdAndDelete(reactionid)
+            .exec()
+            .then((data) => {
+                console.log(data.reaction);
+            });
+        Post.findOneAndUpdate(
+            { _id: post_id, likes: { $gt: 0 } },
+            {
+                $pull: {
+                    reactions: reactionid,
+                },
+                $inc: { likes: -1 },
+            }
+        ).exec();
     });
 
     // ! almost unwanted code should remove later

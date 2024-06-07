@@ -1,30 +1,25 @@
-import like_btn from "../assets/like_btn.png";
-import styles from "./reaction.module.css";
+import style from "./reaction.module.css";
+import dislike_pic from "../assets/dislike_btn.png";
 import socket from "../socket.js";
 import { useEffect, useState } from "react";
-// have made so that if you like it will be stored in db but there is no system to unlike or dislike too this will be the work for tomorrow
-function Like({ postId, reaction, amount, setReactionDetails, setNoOfLikes }) {
+function Dislike({ postId, reaction, amount, setReactionDetails, setNoOfDislikes }) {
     const [state, setState] = useState(0);
     // const [reaction, setReactionDetails] = useState(reaction);
-    // const [amount,setNoOfLikes]=useState(amount)
+    // const [amount, setNoOfDislikes] = useState(amount);
     useEffect(() => {
         if (reaction) {
             setState(reaction.reaction);
         } else {
             setState(0);
         }
-        console.log(state)
     });
-    const likeBtn = (
+    const dislikeBtn = (
         <button
-            className={styles.noReaction}
+            className={style.noReaction}
             onClick={() => {
-                setState(1);
-                setNoOfLikes(amount + 1);
                 if (reaction) {
-                    console.log(localStorage.getItem("id"), postId, null);
                     socket.emit(
-                        "liked",
+                        "disliked",
                         localStorage.getItem("id"),
                         postId,
                         reaction._id,
@@ -32,34 +27,35 @@ function Like({ postId, reaction, amount, setReactionDetails, setNoOfLikes }) {
                     );
                 } else {
                     socket.emit(
-                        "liked",
+                        "disliked",
                         localStorage.getItem("id"),
                         postId,
                         null,
                         setReactionDetails
                     );
                 }
+                setState(-1);
+                setNoOfDislikes(amount + 1);
             }}>
-            <img className="like_pic" src={like_btn} alt="Like button" />
+            <img src={dislike_pic} alt="dislikepic" />
             <span>{amount}</span>
         </button>
     );
-    const pressedLikeBtn = (
+    const pressedDislikeBtn = (
         <button
-            className={styles.like}
+            className={style.dislike}
             onClick={() => {
                 socket.emit("unreacted", localStorage.getItem("id"), postId, reaction._id);
                 setReactionDetails(null);
                 setState(0);
-                setNoOfLikes(amount - 1);
+                setNoOfDislikes(amount - 1);
                 console.log(state);
             }}>
-            <img src={like_btn} alt="Like button" />
+            <img src={dislike_pic} alt="dislike_pic"></img>
             <span>{amount}</span>
         </button>
     );
-
-    return state ? pressedLikeBtn : likeBtn;
+    return state == -1 ? pressedDislikeBtn : dislikeBtn;
 }
 
-export default Like;
+export default Dislike;

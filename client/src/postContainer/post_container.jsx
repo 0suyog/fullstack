@@ -53,6 +53,8 @@ function PostContainer({ uid }) {
                         postId={post._id}
                         key={post._id}
                         reaction={post.reactions[0]}
+                        likes={post.likes}
+                        dislikes={post.dislikes}
                     />
                 );
             })}
