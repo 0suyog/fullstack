@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const Schema   = mongoose.Schema;
 
 const commentSchema = new Schema({
   post: {
     type: mongoose.Types.ObjectId,
-    ref: "post",
+    ref : "post",
   },
   commentor: {
     type: mongoose.Types.ObjectId,
-    ref:"user"
+    ref : "user"
   },
   comment: String,
-  date: {
-    type: Date,
+  date   : {
+    type   : Date,
     default: Date.now(),
   },
   reaction: {
-    type: Number,
+    type   : Number,
     defaule: 0,
   },
 });

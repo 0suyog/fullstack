@@ -3,18 +3,18 @@ img {
 }
 .noReaction {
     background-color: rgb(66, 67, 68);
-    padding: 0;
-    width: 50%;
+    padding         : 0;
+    width           : 50%;
 }
 
 .like {
     background-color: rgb(0, 181, 222);
-    padding: 0;
-    width: 50%;
+    padding         : 0;
+    width           : 50%;
 }
 
 .dislike {
     background-color: brown;
-    padding: 0;
-    width: 50%;
+    padding         : 0;
+    width           : 50%;
 }

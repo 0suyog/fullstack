@@ -43,7 +43,7 @@ function PostContainer({ uid }) {
             <Post.Post_btn onclick={handleClick} />
             {posting_area}
             {posts.map((post) => {
-                // console.log(post.reactions[0])
+                console.log(post.description)
                 return (
                     <Post.Post
                         uploader={post.uploader}
@@ -52,7 +52,7 @@ function PostContainer({ uid }) {
                         comments={post.comments}
                         postId={post._id}
                         key={post._id}
-                        reaction={post.reactions[0]}
+                        reaction={post.reactions}
                         likes={post.likes}
                         dislikes={post.dislikes}
                     />

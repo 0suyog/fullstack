@@ -7,33 +7,49 @@ import styles from "./post.module.css";
 import Uname from "../usernameWithProfile/username_with_pofile.jsx";
 import socket from "../socket.js";
 import { useEffect, useState } from "react";
-function Post({ uploader, description, media, comments, postId, reaction, likes, dislikes }) {
-    console.log(reaction);
-    const [reactionDetails, setReactionDetails] = useState(reaction);
-    const[noOfLikes,setNoOfLikes]=useState(likes)
-    const[noOfDisikes,setNoOfDislikes]=useState(dislikes)
+function Post(props) {
+    // console.log(props.reaction);
+    const [reaction, setReaction] = useState(props.reaction);
+    const [prevReaction, setPrevReaction] = useState(props.reaction);
+    const [noOfLikes, setNoOfLikes] = useState(props.likes);
+    const [noOfDisikes, setNoOfDislikes] = useState(props.dislikes);
+    useEffect(() => {
+        console.log(reaction);
+        if (reaction != prevReaction) {
+            if (prevReaction == 1 && reaction==-1) {
+                setNoOfLikes(noOfLikes - 1);
+            } else if (prevReaction == -1 && reaction==1) {
+                setNoOfDislikes(noOfDisikes - 1);
+            }
+        }
+        setPrevReaction(reaction);
+    }, [reaction]);
     return (
         <div className={styles.postContainer}>
-            <Uname uname={uploader.name} />
-            <p className={styles.description}>{description}</p>
-            <img src={`data:image/png;base64,${media}`} alt="post image" className={styles.media} />
+            <Uname uname={props.uploader.name} />
+            <p className={styles.description}>{props.description}</p>
+            <img
+                src={`data:image/png;base64,${props.media}`}
+                alt="post image"
+                className={styles.media}
+            />
             <hr />
             <Like
-                postId={postId}
-                reaction={reactionDetails}
+                postId={props.postId}
+                reaction={reaction}
                 amount={noOfLikes}
-                setReactionDetails={setReactionDetails}
+                setReaction={setReaction}
                 setNoOfLikes={setNoOfLikes}
             />
             <Dislike
-                postId={postId}
-                reaction={reactionDetails}
+                postId={props.postId}
+                reaction={reaction}
                 amount={noOfDisikes}
-                setReactionDetails={setReactionDetails}
+                setReaction={setReaction}
                 setNoOfDislikes={setNoOfDislikes}
             />
             <Comment.Comment_button />
-            <Comment_section comments={comments} postId={postId} />
+            <Comment_section comments={props.comments} postId={props.postId} />
         </div>
     );
 }
@@ -42,14 +58,14 @@ function PostButton({ onclick }) {
     return <button onClick={onclick}>Post here</button>;
 }
 
-function PostingArea({ uploader }) {
-    console.log("uploader", uploader);
+function PostingArea(props) {
+    console.log("props.uploader", props.uploader);
     const [description, setDescription] = useState("");
     const [image, setImage] = useState("");
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(uploader, description, image);
-        socket.emit("post", uploader, description, image);
+        console.log(props.uploader, description, image);
+        socket.emit("post", props.uploader, description, image);
     }
 
     function handleChange(event, func) {

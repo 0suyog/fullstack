@@ -20,8 +20,8 @@ function Register({func}) {
     <div>
       <p>Register here</p>
       <span>Username</span>
-      <input type="text" placeholder="Username" onChange={handleChange} />
-      <button onClick={handleClick}>Register</button>
+      <input  type    = "text" placeholder = "Username" onChange = {handleChange} />
+      <button onClick = {handleClick}>Register</button>
 
     </div>
   );

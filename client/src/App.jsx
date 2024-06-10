@@ -6,10 +6,10 @@ import Login from "./Login/login.jsx";
 import Lists from "./Friendlist/friend_list.jsx";
 function App() {
   const [username, setUsesrname] = useState(false);
-  const friend_liststyle = {
+  const friend_liststyle         = {
     position: "sticky",
-    align: "right",
-    display:"flex"
+    align   : "right",
+    display : "flex"
 
   };
   function login(username) {
@@ -20,17 +20,17 @@ function App() {
 
   return username ? (
 
-      <div style={friend_liststyle}>
-        <PostContainer uid={username} />
-        <Lists.friendlist uid={username} />
-        <Lists.userlist uid={username} />
+      <div              style = {friend_liststyle}>
+      <PostContainer    uid   = {username} />
+      <Lists.friendlist uid   = {username} />
+      <Lists.userlist   uid   = {username} />
 
       </div>
 
   ) : (
     <>
-      <Register func={login} />
-      <Login func={login} />
+      <Register func = {login} />
+      <Login    func = {login} />
     </>
   );
 }
