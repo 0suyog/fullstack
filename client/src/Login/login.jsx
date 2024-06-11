@@ -8,16 +8,16 @@ function Login(props) {
   }
   
   function handleClick() {
-    socket.emit("login", username);
+    socket.emit("login", username, socket.id);
     // console.log("meowww");
   }
   function handleChange(event) {
     setUsername(event.target.value);
   }
   useEffect(() => {
-    socket.on("logged_in", (id) => [
+    socket.on("logged_in", (id) => {
       props.func(id)
-    ])
+  })
     socket.on("wrong_cred", () => {
       alert("wrong credentials")
       

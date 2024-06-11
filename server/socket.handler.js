@@ -4,6 +4,7 @@ const Comment          = require("./models/comment.model");
 const Reaction         = require("./models/reaction.model");
 const friend_is_unique = require("./middlewares/friends_validator");
 const mongoose         = require("mongoose");
+let   onlineUsers      = {};
 async function socketfunc(socket) {
     socket.on("sendall", () => {
         User.find()
@@ -13,12 +14,16 @@ async function socketfunc(socket) {
                 socket.emit("users", data);
             });
     });
-
-    socket.on("login", async (uname) => {
+      // ! I am trying to make friend requests and adding friends synchronize with both users
+      // ! for that using same method as the messaging app storing all the users id with thheir socket id
+      // ! in a object then emitting event to just the specific ones
+    socket.on("login", async (uname, socket_id) => {
         console.log("trying to login", uname);
         const id = await User.findOne({ name: uname }).select("_id").exec();
-        if (id) socket.emit("logged_in", id);
-        else socket.emit("wrong_cred");
+        if (id) {
+            socket.emit("logged_in", id);
+            onlineUsers[id] = socket_id;
+        } else socket.emit("wrong_cred");
     });
 
     socket.on("register", (uname) => {
@@ -305,7 +310,9 @@ async function socketfunc(socket) {
         data = await User.findOne({ _id: uid }).select("friends").populate("friends").exec();
         data.friends ? socket.emit("friends", data.friends): socket.emit("no_friends");
     });
-
+      // * event emition are swapped with the way the db is updated cuz
+      // * its needed to send uid and uname too and since i have alreay queried the data
+      // * i thought of using it instead of accessing db again or storing the data in a variable
     socket.on("add_friend", async (uid, friendid) => {
         if ((await friend_is_unique(uid, friendid)) == 1) {
             User.findById(uid)
@@ -313,12 +320,17 @@ async function socketfunc(socket) {
                 .then((data) => {
                     data.friends.push(friendid);
                     data.save();
+                    if (onlineUsers[friendid]) {
+                        socket.to(onlineUsers[friendid]).emit("friend_added", uid, data.name);
+                    }
                 });
             User.findById(friendid)
                 .exec()
                 .then((data) => {
                     data.friends.push(uid);
                     data.save();
+
+                    socket.emit("friend_added", friendid, data.name);
                 });
         } else {
             socket.emit("exist");
