@@ -1,3 +1,3 @@
-const socket = io("http://localhost:3000");
+const socket = io("https://sangalo-server.onrender.com");
 
 export default socket;
