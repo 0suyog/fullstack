@@ -14,12 +14,12 @@ function UserList({ uid }) {
         socket.emit("add_friend", uid, user);
     }
     return (
-        <div className = {styles.friend_list}>
+        <div className={styles.friend_list}>
             <p>Click in any one of these to add them to friend list</p>
             {users.map((user) => {
                 return (
-                    <span         key   = {user._id} className = {styles.user}>
-                    <UserwProfile uname = {user.name} id       = {user._id} />
+                    <span key={user._id} className={styles.user}>
+                        <UserwProfile uname={user.name} id={user._id} />
                         <button
                             onClick={() => {
                                 addFriend(user._id);
@@ -40,30 +40,32 @@ function FriendList({ uid }) {
             setFriends(friends);
         });
         socket.on("no_friends", () => {});
+    }, []);
+    useState(() => {
         socket.on("friend_added", (uid, name) => {
             let user = {
-                _id : uid,
+                _id: uid,
                 name: name,
-          };
-          alert("friend added")
-          console.log([...friends])
-            setFriends((friends)=>[...friends,user]);
+            };
+            alert("friend added");
+            console.log([...friends]);
+            setFriends((friends) => [...friends, user]);
         });
-    }, []);
+    });
     function viewProfile(friend) {
         console.log("we are gonna view profile of ", friend);
     }
 
     return (
-        <div className = {styles.friend_list}>
+        <div className={styles.friend_list}>
             {friends.length != 0 ? (
                 <>
                     <p>this is friendlist</p>
                     {friends.map((friend) => {
                         return (
-                              // ! need to add a id and func in userwprofile file too its mext
-                            <span         key   = {friend._id} className = {styles.user}>
-                            <UserwProfile uname = {friend.name} id       = {friend._id} />
+                            // ! need to add a id and func in userwprofile file too its mext
+                            <span key={friend._id} className={styles.user}>
+                                <UserwProfile uname={friend.name} id={friend._id} />
                                 <button
                                     onClick={() => {
                                         viewProfile;

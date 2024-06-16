@@ -6,15 +6,14 @@ import Comment_section from "../commentSection/CommentSection.jsx";
 import styles from "./post.module.css";
 import Uname from "../usernameWithProfile/username_with_pofile.jsx";
 import socket from "../socket.js";
-import { useEffect, useState } from "react";
-function Post(props) {
+import { forwardRef, useEffect, useState } from "react";
+const Post=forwardRef((props,ref)=>{
     // console.log(props.reaction);
     const [reaction, setReaction] = useState(props.reaction);
     const [prevReaction, setPrevReaction] = useState(props.reaction);
     const [noOfLikes, setNoOfLikes] = useState(props.likes);
     const [noOfDisikes, setNoOfDislikes] = useState(props.dislikes);
     useEffect(() => {
-        console.log(reaction);
         if (reaction != prevReaction) {
             if (prevReaction == 1 && reaction==-1) {
                 setNoOfLikes(noOfLikes - 1);
@@ -25,7 +24,7 @@ function Post(props) {
         setPrevReaction(reaction);
     }, [reaction]);
     return (
-        <div className={styles.postContainer}>
+        <div className={styles.postContainer} ref={ref}>
             <Uname uname={props.uploader.name} />
             <p className={styles.description}>{props.description}</p>
             <img
@@ -52,7 +51,7 @@ function Post(props) {
             <Comment_section comments={props.comments} postId={props.postId} />
         </div>
     );
-}
+})
 
 function PostButton({ onclick }) {
     return <button onClick={onclick}>Post here</button>;

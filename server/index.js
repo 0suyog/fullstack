@@ -14,6 +14,7 @@ const io = new Server(server, {
 const User = require("./models/users.model");
 console.log("the server has launched")
 io.on("connection", (socket) => {
+    console.log("connected")
     socketfunc(socket);
 });
 
