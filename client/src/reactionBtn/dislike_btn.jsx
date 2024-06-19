@@ -1,4 +1,4 @@
-import style from "./reaction.module.css";
+import styles from "./reaction.module.css";
 import dislike_pic from "../assets/dislike_btn.png";
 import socket from "../socket.js";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ function Dislike(props) {
     });
     const dislikeBtn = (
         <button
-            className = {style.noReaction}
+            className = {styles.noReaction}
             onClick   = {() => {
                 setState(-1);
                 socket.emit(
@@ -32,7 +32,7 @@ function Dislike(props) {
     );
     const pressedDislikeBtn = (
         <button
-            className = {style.dislike}
+            className = {styles.dislike}
             onClick   = {() => {
                 socket.emit("unreacted", localStorage.getItem("id"), props.postId, state);
                 props.setReaction(0);

@@ -15,9 +15,9 @@ function Login(props) {
     setUsername(event.target.value);
   }
   useEffect(() => {
-    socket.on("logged_in", (id) => {
-      props.func(id)
-  })
+    socket.on("logged_in", (user) => {
+      props.func(user)
+  },[])
     socket.on("wrong_cred", () => {
       alert("wrong credentials")
       

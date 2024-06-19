@@ -22,3 +22,8 @@
 .form{
   display: block;
 }
+
+.twoComments{
+  display: flex;
+  flex-direction: column;
+}

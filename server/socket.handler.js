@@ -1,12 +1,12 @@
-const User             = require("./models/users.model");
-const Post             = require("./models/post.model");
-const Comment          = require("./models/comment.model");
-const Reaction         = require("./models/reaction.model");
+const User = require("./models/users.model");
+const Post = require("./models/post.model");
+const Comment = require("./models/comment.model");
+const Reaction = require("./models/reaction.model");
 const friend_is_unique = require("./middlewares/friends_validator");
-const mongoose         = require("mongoose");
-var   randomSentence   = require("random-sentence");
-  // import { generate, count } from "random-words";
-var imgGen      = require("js-image-generator");
+const mongoose = require("mongoose");
+var randomSentence = require("random-sentence");
+// import { generate, count } from "random-words";
+var imgGen = require("js-image-generator");
 let onlineUsers = {};
 async function socketfunc(socket) {
     socket.on("sendall", () => {
@@ -17,12 +17,12 @@ async function socketfunc(socket) {
                 socket.emit("users", data);
             });
     });
-      // let img
-      // imgGen.generateImage(800, 600, 80,(err,image) => {
-      //     img= image;
-      // })
-      // console.log(img)
-      // ! Test code to fill db with dummy data
+    // let img
+    // imgGen.generateImage(800, 600, 80,(err,image) => {
+    //     img= image;
+    // })
+    // console.log(img)
+    // ! Test code to fill db with dummy data
     function randomDate(start, end) {
         return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     }
@@ -35,25 +35,30 @@ async function socketfunc(socket) {
             });
             let date = randomDate(new Date(1990, 0, 1), new Date());
             let post = new Post({
-                uploader   : id,
+                uploader: id,
                 description: date,
-                media      : Buffer.from(image.data).toString("base64"),
-                time       : date,
+                media: Buffer.from(image.data).toString("base64"),
+                time: date,
             });
             post.save();
         }
     });
 
-      // //   ! I am trying to make friend requests and adding friends synchronize with both users
-      // // ! for that using same method as the messaging app storing all the users id with thheir socket id
-      // // ! in a object then emitting event to just the specific ones
+    // //   ! I am trying to make friend requests and adding friends synchronize with both users
+    // // ! for that using same method as the messaging app storing all the users id with thheir socket id
+    // // ! in a object then emitting event to just the specific ones
     socket.on("login", async (uname, socket_id) => {
-        const id = await User.findOne({ name: uname }).select("_id").exec();
-        if (id) {
-            socket.emit("logged_in", id);
-            onlineUsers[id._id.toString()] = socket_id;
-        } else socket.emit("wrong_cred");
-        console.log("trying to login", uname);
+        User.findOne({ name: uname })
+            .select("_id name")
+            .exec()
+            .then((user) => {
+                socket.emit("logged_in", user);
+                onlineUsers[user._id.toString()] = socket_id;
+                console.log("trying to login", uname);
+            })
+            .catch((e) => {
+                socket.emit("wrong_cred");
+            });
     });
 
     socket.on("register", (uname) => {
@@ -67,7 +72,7 @@ async function socketfunc(socket) {
             });
         });
     });
-      /*
+    /*
      * On initial request all the posts of all the friends are sent to the client side
      * the posts that go to clients are array of objects and objects are formatted like this
     {
@@ -78,10 +83,10 @@ async function socketfunc(socket) {
                     comment  : comment,
                     commentor: {
                         name: name,
-                        id  : id,
+                        id  : id},
                         date: date,
                         post: post_id
-                    },]
+                    ]
                     description: "what ever description of the post",
                     dislikes   : noOfDislikes,
                     likes      : noOfLikes,
@@ -118,18 +123,18 @@ async function socketfunc(socket) {
             },
             {
                 $project: {
-                    uploader   : 1,
-                    time       : 1,
+                    uploader: 1,
+                    time: 1,
                     description: 1,
-                    media      : 1,
-                    likes      : 1,
-                    dislikes   : 1,
-                    comments   : 1,
-                    reactions  : {
+                    media: 1,
+                    likes: 1,
+                    dislikes: 1,
+                    comments: 1,
+                    reactions: {
                         $filter: {
                             input: "$reactions",
-                            as   : "reaction",
-                            cond : {
+                            as: "reaction",
+                            cond: {
                                 $eq: ["$$reaction.uid", new mongoose.Types.ObjectId(id)],
                             },
                         },
@@ -138,24 +143,24 @@ async function socketfunc(socket) {
             },
             {
                 $lookup: {
-                    from        : "comments",
-                    localField  : "comments",
+                    from: "comments",
+                    localField: "comments",
                     foreignField: "_id",
-                    as          : "comments",
+                    as: "comments",
                 },
             },
             {
                 $unwind: {
-                    path                      : "$comments",
+                    path: "$comments",
                     preserveNullAndEmptyArrays: true,
                 },
             },
             {
                 $lookup: {
-                    from        : "users",
-                    localField  : "comments.commentor",
+                    from: "users",
+                    localField: "comments.commentor",
                     foreignField: "_id",
-                    as          : "comments.commentor",
+                    as: "comments.commentor",
                 },
             },
             {
@@ -169,15 +174,17 @@ async function socketfunc(socket) {
                             },
                             in: {
                                 name: "$$commentor.name",
-                                id  : "$$commentor._id",
+                                id: "$$commentor._id",
                             },
                         },
                     },
                 },
+            }, {
+                $sort:{"comments._id":-1}
             },
             {
                 $group: {
-                    _id     : "$_id",
+                    _id: "$_id",
                     comments: {
                         $push: "$comments",
                     },
@@ -206,10 +213,10 @@ async function socketfunc(socket) {
             },
             {
                 $lookup: {
-                    from        : "users",
-                    localField  : "uploader",
+                    from: "users",
+                    localField: "uploader",
                     foreignField: "_id",
-                    as          : "uploader",
+                    as: "uploader",
                 },
             },
             {
@@ -223,7 +230,7 @@ async function socketfunc(socket) {
                             },
                             in: {
                                 name: "$$postUploader.name",
-                                id  : "$$postUploader._id",
+                                id: "$$postUploader._id",
                             },
                         },
                     },
@@ -304,24 +311,24 @@ async function socketfunc(socket) {
             },
             {
                 $lookup: {
-                    from        : "comments",
-                    localField  : "commentor",
+                    from: "comments",
+                    localField: "commentor",
                     foreignField: "_id",
-                    as          : "comments",
+                    as: "comments",
                 },
             },
             {
                 $unwind: {
-                    path                      : "$comments",
+                    path: "$comments",
                     preserveNullAndEmptyArrays: true,
                 },
             },
             {
                 $lookup: {
-                    from        : "users",
-                    localField  : "comments.commentor",
+                    from: "users",
+                    localField: "comments.commentor",
                     foreignField: "_id",
-                    as          : "comments.commentor",
+                    as: "comments.commentor",
                 },
             },
             {
@@ -335,7 +342,7 @@ async function socketfunc(socket) {
                             },
                             in: {
                                 name: "$$commentor.name",
-                                id  : "$$commentor._id",
+                                id: "$$commentor._id",
                             },
                         },
                     },
@@ -343,7 +350,7 @@ async function socketfunc(socket) {
             },
             {
                 $group: {
-                    _id     : "$_id",
+                    _id: "$_id",
                     comments: {
                         $push: "$comments",
                     },
@@ -378,8 +385,8 @@ async function socketfunc(socket) {
                                 reaction: {
                                     $filter: {
                                         input: "$reactions",
-                                        as   : "r",
-                                        cond : {
+                                        as: "r",
+                                        cond: {
                                             $eq: ["$$r.uid", new mongoose.Types.ObjectId(uid)],
                                         },
                                     },
@@ -406,10 +413,10 @@ async function socketfunc(socket) {
             },
             {
                 $lookup: {
-                    from        : "users",
-                    localField  : "uploader",
+                    from: "users",
+                    localField: "uploader",
                     foreignField: "_id",
-                    as          : "uploader",
+                    as: "uploader",
                 },
             },
             {
@@ -422,7 +429,7 @@ async function socketfunc(socket) {
                                 },
                             },
                             in: {
-                                id  : "$$u._id",
+                                id: "$$u._id",
                                 name: "$$u.name",
                             },
                         },
@@ -442,8 +449,8 @@ async function socketfunc(socket) {
                 socket.emit("sending_more_posts", posts);
             });
     });
-      // TODO will make posts be sent regularly
-      /*
+    // TODO will make posts be sent regularly
+    /*
      *logic is that for the initial posts we will first send first 10 data sorted by date
      *then after scroller has reached around to 7 posts mark an event will be emitted
      *with the last posts date and also first post datefrom client and on response to that
@@ -456,11 +463,11 @@ async function socketfunc(socket) {
     socket.on("post", async (user_id, description, image) => {
         console.log(user_id, description, image);
         let post = new Post({
-            uploader   : user_id,
+            uploader: user_id,
             description: description,
-            media      : Buffer.from(image).toString("base64"),
+            media: Buffer.from(image).toString("base64"),
         });
-          // console.log(user.posts);
+        // console.log(user.posts);
         post.save();
     });
     socket.on("liked", (uid, post_id, setReaction) => {
@@ -468,7 +475,7 @@ async function socketfunc(socket) {
             .exec()
             .then((document) => {
                 for (let i of document.reactions) {
-                      // console.log(i);
+                    // console.log(i);
                     if (uid == i.uid) {
                         if (i.reaction == -1) {
                             document.dislikes -= 1;
@@ -499,11 +506,11 @@ async function socketfunc(socket) {
             .exec()
             .then((document) => {
                 for (let i of document.reactions) {
-                      // console.log(i);
+                    // console.log(i);
                     if (uid == i.uid) {
-                        if (i.reaction == 1) document.likes     -= 1;
+                        if (i.reaction == 1) document.likes -= 1;
                         if (i.reaction != -1) document.dislikes += 1;
-                           i.reaction                            = -1;
+                        i.reaction = -1;
                         document.save().then(() => {
                             setReaction(-1);
                             console.log("savved1");
@@ -527,7 +534,7 @@ async function socketfunc(socket) {
                 { _id: post_id },
                 {
                     $pull: { reactions: { uid: new mongoose.Types.ObjectId(uid) } },
-                    $inc : { likes: -1 },
+                    $inc: { likes: -1 },
                 }
             ).exec();
         } else if (reaction == -1) {
@@ -535,29 +542,29 @@ async function socketfunc(socket) {
                 { _id: post_id },
                 {
                     $pull: { reactions: { uid: new mongoose.Types.ObjectId(uid) } },
-                    $inc : { dislikes: -1 },
+                    $inc: { dislikes: -1 },
                 }
             ).exec();
         }
     });
 
-      // ! almost unwanted code should remove later
-      // socket.on("ready", async (name) => {
-      //     data    = await User.find().select("name").exec();
-      //     friends = await User.findOne({ name: name }).select("friends").populate("friends").exec();
-      //     uid     = await User.findOne({ name: name }).select("_id").exec();
-      //     socket.emit("uid", uid);
-      //     socket.emit("friends", friends);
-      //     socket.emit("users", data);
-      // });
+    // ! almost unwanted code should remove later
+    // socket.on("ready", async (name) => {
+    //     data    = await User.find().select("name").exec();
+    //     friends = await User.findOne({ name: name }).select("friends").populate("friends").exec();
+    //     uid     = await User.findOne({ name: name }).select("_id").exec();
+    //     socket.emit("uid", uid);
+    //     socket.emit("friends", friends);
+    //     socket.emit("users", data);
+    // });
 
     socket.on("friend_list", async (uid) => {
         data = await User.findOne({ _id: uid }).select("friends").populate("friends").exec();
-        data.friends ? socket.emit("friends", data.friends): socket.emit("no_friends");
+        data.friends ? socket.emit("friends", data.friends) : socket.emit("no_friends");
     });
-      // * event emition are swapped with the way the db is updated cuz
-      // * its needed to send uid and uname too and since i have alreay queried the data
-      // * i thought of using it instead of accessing db again or storing the data in a variable
+    // * event emition are swapped with the way the db is updated cuz
+    // * its needed to send uid and uname too and since i have alreay queried the data
+    // * i thought of using it instead of accessing db again or storing the data in a variable
     socket.on("add_friend", async (uid, friendid) => {
         if ((await friend_is_unique(uid, friendid)) == 1) {
             console.log(onlineUsers);
@@ -583,16 +590,28 @@ async function socketfunc(socket) {
         }
         console.log("friend:", friendid);
     });
+    socket.on("search_user", (uname) => {
+        const regex = new RegExp(uname, "i");
+        User.find({ name: { $regex: regex } })
+            .select("name _id")
+            .limit(6)
+            .exec()
+            .then((users) => {
+                console.log(users);
+                socket.emit("searched_users", users);
+            });
+    });
 
     socket.on("comment", (post_, commentor, comment) => {
         comment = new Comment({
-            post     : post_,
-            comment  : comment,
+            post: post_,
+            comment: comment,
             commentor: commentor,
         });
         comment.save().then((cmt) => {
             Post.findByIdAndUpdate(post_, { $push: { comments: String(cmt._id) } }).exec();
-            console.log(String(cmt._id));
+            console.log(cmt.comment);
+            socket.emit("comment_added",cmt);
         });
     });
 }

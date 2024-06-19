@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+
+}
+.submitBtn{
+    display: inline;
+    width: 20px;
+}
+
+.image{
+    width: 20px;
+    margin: 0;
+}

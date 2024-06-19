@@ -1,4 +1,4 @@
-import monke from "../assets/monke.jpg";
+
 import styles from "./username_with_profile.module.css";
 import socket from "../socket.js";
 function UserwProfile({ uname, id }) {
@@ -8,7 +8,7 @@ function UserwProfile({ uname, id }) {
   return (
     <div>
       <img
-        src={`https://robohash.org/${uname}`}
+        src={`https://robohash.org/set_set1/bgset_bg1/${uname}`}
         alt="Profile Picture"
         className={styles.profile}
       />

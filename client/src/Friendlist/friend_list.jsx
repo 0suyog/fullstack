@@ -40,18 +40,25 @@ function FriendList({ uid }) {
             setFriends(friends);
         });
         socket.on("no_friends", () => {});
-    }, []);
-    useState(() => {
+
         socket.on("friend_added", (uid, name) => {
             let user = {
                 _id: uid,
                 name: name,
             };
-            alert("friend added");
-            console.log([...friends]);
-            setFriends((friends) => [...friends, user]);
+            // alert("friend added");
+            // socket.emit("initial_req", localStorage.getItem("id"));
+            // alert(friends.find((friend) => friend._id == uid));
+            if (friends.find((friend) => friend._id == uid)) {
+            }
+            else {
+                setFriends((friends) => [...friends, user]);
+            }
         });
-    });
+        return () => {
+            socket.off("friend added");
+        };
+    }, []);
     function viewProfile(friend) {
         console.log("we are gonna view profile of ", friend);
     }
