@@ -8,13 +8,6 @@ socket.on("uid", (id) => {
   uid = id;
 });
 
-socket.on("hello", (data) => {
-  console.log(data);
-});
-
-socket.on("saved", (data) => {
-  console.log(data);
-});
 
 document.getElementById("create_user").addEventListener("click", () => {
   socket.emit("test", document.getElementById("username").value);
@@ -34,9 +27,7 @@ document.getElementById("form").addEventListener("submit", (event) => {
 });
 
 socket.on("initial_post", (data) => {
-  console.log(data);
   data.forEach((post) => {
-    console.log(post._id);
     let parent = document.getElementById("posts");
     let name_sec = document.createElement("p");
     let time = document.createElement("p");
@@ -51,12 +42,10 @@ socket.on("initial_post", (data) => {
     description.innerHTML = post.description;
     post.comments.forEach((comment_) => {
       let option = document.createElement("option");
-      console.log(comment_);
       option.id = comment_._id;
       option.value = comment_.comment;
       option.text = comment_.comment;
       comment.appendChild(option);
-      console.log(comment);
     });
     comment.style.zIndex = 99;
     container.id = post._id;
@@ -72,20 +61,17 @@ socket.on("initial_post", (data) => {
     container.appendChild(comment);
     container.appendChild(hr);
     container.addEventListener("click", (event) => {
-      console.log(container.id);
       document.getElementById("post_id").value = container.id;
     });
     parent.appendChild(container);
   });
 
-  // console.log(data);
 });
 
 let userlist_parent = document.getElementById("users");
 socket.on("users", (users) => {
   userlist_parent.innerHTML = "";
   users.forEach((user) => {
-    // console.log(user);
     let a = document.createElement("input");
     a.type = "button";
     a.id = user._id;
@@ -111,11 +97,9 @@ socket.on("users", (users) => {
   document.getElementById("json").innerHTML = JSON.stringify(users);
 });
 socket.on("exist", () => {
-  console.log("exist");
 });
 friendlist_parent = document.getElementById("friends");
 socket.on("friends", (friends) => {
-  // console.log(JSON.stringify(friends))
   friends.friends.forEach((friend) => {
     let a = document.createElement("input");
     a.type = "button";
@@ -130,7 +114,6 @@ socket.on("friends", (friends) => {
     friendlist_parent.appendChild(a);
   });
 });
-// socket.emit("ready", username);
 
 document.getElementById("post_comment").addEventListener("click", (event) => {
   event.preventDefault();

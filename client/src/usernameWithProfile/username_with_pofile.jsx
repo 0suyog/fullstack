@@ -1,9 +1,12 @@
 
 import styles from "./username_with_profile.module.css";
 import socket from "../socket.js";
+import { useNavigate } from "react-router-dom";
 function UserwProfile({ uname, id }) {
+  const navigate=useNavigate()
   function handleClick() {
-    console.log("viewing profile of ", id);
+    socket.emit("profile", id);
+    navigate(`/profile/${uname}`)
   }
   return (
     <div>

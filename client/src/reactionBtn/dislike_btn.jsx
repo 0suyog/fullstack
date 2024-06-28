@@ -38,7 +38,6 @@ function Dislike(props) {
                 props.setReaction(0);
                 setState(0);
                 props.setNoOfDislikes(props.amount - 1);
-                  // console.log(state);
             }}>
             <img src = {dislike_pic} alt = "dislike_pic"></img>
             <span>{props.amount}</span>

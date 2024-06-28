@@ -11,7 +11,7 @@ function Dropdown(props) {
         });
     }, []);
     useEffect(() => {
-        console.info(userList);
+
     }, [userList]);
     function addFriend(user) {
         socket.emit("add_friend", localStorage.getItem("id"), user);

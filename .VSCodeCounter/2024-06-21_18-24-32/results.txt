@@ -1,0 +1,40 @@
+Date : 2024-06-21 18:24:32
+Directory : d:\fullstack\server
+Total : 12 files,  2710 codes, 93 comments, 38 blanks, all 2841 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |      1,959 |          0 |          2 |      1,961 |
+| JavaScript |         10 |        751 |         93 |         36 |        880 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         12 |      2,710 |         93 |         38 |      2,841 |
+| . (Files)                                                 |          5 |      2,599 |         69 |         19 |      2,687 |
+| middlewares                                               |          3 |         15 |         24 |          6 |         45 |
+| models                                                    |          4 |         96 |          0 |         13 |        109 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                  | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\fullstack\server\database.js                           | JavaScript |          9 |          0 |          2 |         11 |
+| d:\fullstack\server\index.js                              | JavaScript |         21 |          0 |          3 |         24 |
+| d:\fullstack\server\middlewares\friends_validator.js      | JavaScript |         14 |         24 |          3 |         41 |
+| d:\fullstack\server\middlewares\user_validator.js         | JavaScript |          1 |          0 |          2 |          3 |
+| d:\fullstack\server\middlewares\verifying_online_stuff.js | JavaScript |          0 |          0 |          1 |          1 |
+| d:\fullstack\server\models\comment.model.js               | JavaScript |         23 |          0 |          4 |         27 |
+| d:\fullstack\server\models\post.model.js                  | JavaScript |         39 |          0 |          3 |         42 |
+| d:\fullstack\server\models\reaction.model.js              | JavaScript |         16 |          0 |          2 |         18 |
+| d:\fullstack\server\models\users.model.js                 | JavaScript |         18 |          0 |          4 |         22 |
+| d:\fullstack\server\package-lock.json                     | JSON       |      1,936 |          0 |          1 |      1,937 |
+| d:\fullstack\server\package.json                          | JSON       |         23 |          0 |          1 |         24 |
+| d:\fullstack\server\socket.handler.js                     | JavaScript |        610 |         69 |         12 |        691 |
+| Total                                                     |            |      2,710 |         93 |         38 |      2,841 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -35,7 +35,7 @@ function UserList({ uid }) {
 function FriendList({ uid }) {
     const [friends, setFriends] = useState([]);
     useEffect(() => {
-        socket.emit("friend_list", uid);
+        socket.emit("friend_list", localStorage.getItem("id"));
         socket.on("friends", (friends) => {
             setFriends(friends);
         });
@@ -46,9 +46,7 @@ function FriendList({ uid }) {
                 _id: uid,
                 name: name,
             };
-            // alert("friend added");
-            // socket.emit("initial_req", localStorage.getItem("id"));
-            // alert(friends.find((friend) => friend._id == uid));
+
             if (friends.find((friend) => friend._id == uid)) {
             }
             else {
@@ -84,7 +82,7 @@ function FriendList({ uid }) {
                     })}
                 </>
             ) : (
-                <p> {console.log("uname", uid)} You have no friends</p>
+                <p>  You have no friends</p>
             )}
         </div>
     );

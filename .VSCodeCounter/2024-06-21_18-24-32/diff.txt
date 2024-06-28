@@ -1,0 +1,92 @@
+Date : 2024-06-21 18:24:32
+Directory : d:\fullstack\server
+Total : 43 files,  -2680 codes, 45 comments, -68 blanks, all -2703 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JavaScript     |         13 |        723 |         90 |         31 |        844 |
+| XML            |          1 |         -1 |          0 |          0 |         -1 |
+| HTML           |          1 |        -14 |         -2 |         -1 |        -17 |
+| CSS            |         10 |       -210 |         -2 |        -30 |       -242 |
+| JavaScript JSX |         14 |       -776 |        -41 |        -68 |       -885 |
+| JSON           |          4 |     -2,402 |          0 |          0 |     -2,402 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                         | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                            |         43 |     -2,680 |         45 |        -68 |     -2,703 |
+| . (Files)                                                                    |          5 |      2,599 |         69 |         19 |      2,687 |
+| ..                                                                           |         31 |     -5,390 |        -48 |       -106 |     -5,544 |
+| ..\client                                                                    |         31 |     -5,390 |        -48 |       -106 |     -5,544 |
+| ..\client (Files)                                                            |          5 |     -4,401 |         -3 |         -6 |     -4,410 |
+| ..\client\public                                                             |          1 |         -1 |          0 |          0 |         -1 |
+| ..\client\src                                                                |         25 |       -988 |        -45 |       -100 |     -1,133 |
+| ..\client\src (Files)                                                        |          4 |       -148 |         -8 |        -18 |       -174 |
+| ..\client\src\Comment                                                        |          2 |        -58 |          0 |         -8 |        -66 |
+| ..\client\src\Friendlist                                                     |          2 |        -92 |         -4 |         -3 |        -99 |
+| ..\client\src\Login                                                          |          1 |        -40 |         -1 |         -7 |        -48 |
+| ..\client\src\Post                                                           |          2 |       -171 |         -6 |        -13 |       -190 |
+| ..\client\src\Register                                                       |          1 |        -25 |          0 |         -8 |        -33 |
+| ..\client\src\commentSection                                                 |          2 |        -73 |        -18 |         -8 |        -99 |
+| ..\client\src\dropDown                                                       |          2 |        -39 |          0 |         -4 |        -43 |
+| ..\client\src\postContainer                                                  |          2 |       -159 |         -2 |        -10 |       -171 |
+| ..\client\src\reactionBtn                                                    |          3 |       -106 |         -5 |         -8 |       -119 |
+| ..\client\src\searchBox                                                      |          2 |        -43 |          0 |         -8 |        -51 |
+| ..\client\src\usernameWithProfile                                            |          2 |        -34 |         -1 |         -5 |        -40 |
+| middlewares                                                                  |          3 |         15 |         24 |          6 |         45 |
+| models                                                                       |          4 |         96 |          0 |         13 |        109 |
++------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                     | language       | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\fullstack\client\.eslintrc.cjs                                            | JavaScript     |        -21 |          0 |         -1 |        -22 |
+| d:\fullstack\client\index.html                                               | HTML           |        -14 |         -2 |         -1 |        -17 |
+| d:\fullstack\client\package-lock.json                                        | JSON           |     -4,333 |          0 |         -1 |     -4,334 |
+| d:\fullstack\client\package.json                                             | JSON           |        -28 |          0 |         -1 |        -29 |
+| d:\fullstack\client\public\vite.svg                                          | XML            |         -1 |          0 |          0 |         -1 |
+| d:\fullstack\client\src\App.jsx                                              | JavaScript JSX |        -76 |         -6 |         -6 |        -88 |
+| d:\fullstack\client\src\Comment\Comment.jsx                                  | JavaScript JSX |        -26 |          0 |         -3 |        -29 |
+| d:\fullstack\client\src\Comment\Comment.module.css                           | CSS            |        -32 |          0 |         -5 |        -37 |
+| d:\fullstack\client\src\Friendlist\friend_list.jsx                           | JavaScript JSX |        -86 |         -4 |         -3 |        -93 |
+| d:\fullstack\client\src\Friendlist\friend_list.module.css                    | CSS            |         -6 |          0 |          0 |         -6 |
+| d:\fullstack\client\src\Login\login.jsx                                      | JavaScript JSX |        -40 |         -1 |         -7 |        -48 |
+| d:\fullstack\client\src\Post\post.jsx                                        | JavaScript JSX |       -146 |         -6 |         -9 |       -161 |
+| d:\fullstack\client\src\Post\post.module.css                                 | CSS            |        -25 |          0 |         -4 |        -29 |
+| d:\fullstack\client\src\Register\register.jsx                                | JavaScript JSX |        -25 |          0 |         -8 |        -33 |
+| d:\fullstack\client\src\commentSection\CommentSection.jsx                    | JavaScript JSX |        -41 |        -17 |         -4 |        -62 |
+| d:\fullstack\client\src\commentSection\CommentSection.module.css             | CSS            |        -32 |         -1 |         -4 |        -37 |
+| d:\fullstack\client\src\dropDown\dropdown.jsx                                | JavaScript JSX |        -36 |          0 |         -3 |        -39 |
+| d:\fullstack\client\src\dropDown\dropdown.module.css                         | CSS            |         -3 |          0 |         -1 |         -4 |
+| d:\fullstack\client\src\index.css                                            | CSS            |        -61 |          0 |         -8 |        -69 |
+| d:\fullstack\client\src\main.jsx                                             | JavaScript JSX |         -9 |          0 |         -2 |        -11 |
+| d:\fullstack\client\src\postContainer\post_container.jsx                     | JavaScript JSX |       -153 |         -2 |         -9 |       -164 |
+| d:\fullstack\client\src\postContainer\post_container.module.css              | CSS            |         -6 |          0 |         -1 |         -7 |
+| d:\fullstack\client\src\reactionBtn\dislike_btn.jsx                          | JavaScript JSX |        -46 |         -3 |         -2 |        -51 |
+| d:\fullstack\client\src\reactionBtn\like_btn.jsx                             | JavaScript JSX |        -42 |         -2 |         -3 |        -47 |
+| d:\fullstack\client\src\reactionBtn\reaction.module.css                      | CSS            |        -18 |          0 |         -3 |        -21 |
+| d:\fullstack\client\src\searchBox\search_box.jsx                             | JavaScript JSX |        -30 |          0 |         -6 |        -36 |
+| d:\fullstack\client\src\searchBox\search_box.module.css                      | CSS            |        -13 |          0 |         -2 |        -15 |
+| d:\fullstack\client\src\socket.js                                            | JavaScript     |         -2 |         -2 |         -2 |         -6 |
+| d:\fullstack\client\src\usernameWithProfile\username_with_pofile.jsx         | JavaScript JSX |        -20 |          0 |         -3 |        -23 |
+| d:\fullstack\client\src\usernameWithProfile\username_with_profile.module.css | CSS            |        -14 |         -1 |         -2 |        -17 |
+| d:\fullstack\client\vite.config.js                                           | JavaScript     |         -5 |         -1 |         -2 |         -8 |
+| d:\fullstack\server\database.js                                              | JavaScript     |          9 |          0 |          2 |         11 |
+| d:\fullstack\server\index.js                                                 | JavaScript     |         21 |          0 |          3 |         24 |
+| d:\fullstack\server\middlewares\friends_validator.js                         | JavaScript     |         14 |         24 |          3 |         41 |
+| d:\fullstack\server\middlewares\user_validator.js                            | JavaScript     |          1 |          0 |          2 |          3 |
+| d:\fullstack\server\middlewares\verifying_online_stuff.js                    | JavaScript     |          0 |          0 |          1 |          1 |
+| d:\fullstack\server\models\comment.model.js                                  | JavaScript     |         23 |          0 |          4 |         27 |
+| d:\fullstack\server\models\post.model.js                                     | JavaScript     |         39 |          0 |          3 |         42 |
+| d:\fullstack\server\models\reaction.model.js                                 | JavaScript     |         16 |          0 |          2 |         18 |
+| d:\fullstack\server\models\users.model.js                                    | JavaScript     |         18 |          0 |          4 |         22 |
+| d:\fullstack\server\package-lock.json                                        | JSON           |      1,936 |          0 |          1 |      1,937 |
+| d:\fullstack\server\package.json                                             | JSON           |         23 |          0 |          1 |         24 |
+| d:\fullstack\server\socket.handler.js                                        | JavaScript     |        610 |         69 |         12 |        691 |
+| Total                                                                        |                |     -2,680 |         45 |        -68 |     -2,703 |
++------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

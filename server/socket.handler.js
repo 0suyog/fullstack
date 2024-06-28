@@ -4,9 +4,9 @@ const Comment = require("./models/comment.model");
 const Reaction = require("./models/reaction.model");
 const friend_is_unique = require("./middlewares/friends_validator");
 const mongoose = require("mongoose");
-var randomSentence = require("random-sentence");
+const randomSentence = require("random-sentence");
 // import { generate, count } from "random-words";
-var imgGen = require("js-image-generator");
+const imgGen = require("js-image-generator");
 let onlineUsers = {};
 async function socketfunc(socket) {
     socket.on("sendall", () => {
@@ -21,7 +21,7 @@ async function socketfunc(socket) {
     // imgGen.generateImage(800, 600, 80,(err,image) => {
     //     img= image;
     // })
-    // console.log(img)
+    // // console.log(img)
     // ! Test code to fill db with dummy data
     function randomDate(start, end) {
         return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -54,7 +54,7 @@ async function socketfunc(socket) {
             .then((user) => {
                 socket.emit("logged_in", user);
                 onlineUsers[user._id.toString()] = socket_id;
-                console.log("trying to login", uname);
+                // console.log("trying to login", uname);
             })
             .catch((e) => {
                 socket.emit("wrong_cred");
@@ -115,7 +115,7 @@ async function socketfunc(socket) {
             },
             {
                 $sort: {
-                    time: -1,
+                    _id: -1,
                 },
             },
             {
@@ -179,8 +179,9 @@ async function socketfunc(socket) {
                         },
                     },
                 },
-            }, {
-                $sort:{"comments._id":-1}
+            },
+            {
+                $sort: { "comments._id": -1 },
             },
             {
                 $group: {
@@ -251,14 +252,17 @@ async function socketfunc(socket) {
                 },
             },
             {
-                $sort: { time: -1 },
+                $sort: { _id: -1 },
             },
         ]).exec();
+        posts.forEach((post) => {
+            // console.log(post.description)
+        });
         socket.emit("initial_post", posts);
     });
     socket.on("more_posts", async (uid, first_date, last_date) => {
         let friendlist = await User.findOne({ _id: uid }).select("friends").exec();
-
+        let dates=[]
         const posts = Post.aggregate([
             {
                 $match: {
@@ -267,43 +271,21 @@ async function socketfunc(socket) {
                     },
                     $or: [
                         {
-                            $and: [
-                                {
-                                    time: {
-                                        $lt: new Date(first_date),
-                                    },
-                                },
-                                {
-                                    time: {
-                                        $not: {
-                                            $gte: new Date(last_date),
-                                        },
-                                    },
-                                },
-                            ],
+                            time: {
+                                $gt: new Date(first_date),
+                            },
                         },
                         {
-                            $and: [
-                                {
-                                    time: {
-                                        $gt: new Date(last_date),
-                                    },
-                                },
-                                {
-                                    time: {
-                                        $not: {
-                                            $lte: new Date(first_date),
-                                        },
-                                    },
-                                },
-                            ],
+                            time: {
+                                $lt: new Date(last_date),
+                            },
                         },
                     ],
                 },
             },
             {
                 $sort: {
-                    time: -1,
+                    _id: -1,
                 },
             },
             {
@@ -438,16 +420,94 @@ async function socketfunc(socket) {
             },
             {
                 $sort: {
-                    time: -1,
+                    _id: -1,
                 },
             },
         ])
             .exec()
             .then((posts) => {
                 console.log(first_date, last_date);
-                // console.log(posts);
+                if (posts) {
+                    for (let i in posts){
+                        if (((new Date(i.time) > new Date(last_date)) && !(new Date(i.time) < new Date(first_date))) || (!(new Date(i.time) > new Date(last_date)) && (new Date(i.time) < new Date(first_date)))) {
+                            console.log(true)
+                        }
+                    }
+                }
+                console.log("\n")
+                // // console.log(posts);
                 socket.emit("sending_more_posts", posts);
             });
+    });
+    // send all comments for a singular post
+    socket.on("comments_of_post", (id) => {
+        Post.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(id),
+                },
+            },
+            {
+                $project: {
+                    comments: 1,
+                },
+            },
+            {
+                $lookup: {
+                    from: "comments",
+                    localField: "comments",
+                    foreignField: "_id",
+                    as: "comments",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$comments",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "comments.commentor",
+                    foreignField: "_id",
+                    as: "comments.commentor",
+                },
+            },
+            {
+                $addFields: {
+                    "comments.commentor": {
+                        $let: {
+                            vars: {
+                                commentor: {
+                                    $arrayElemAt: ["$comments.commentor", 0],
+                                },
+                            },
+                            in: {
+                                name: "$$commentor.name",
+                                id: "$$commentor._id",
+                            },
+                        },
+                    },
+                },
+            },
+            {
+                $sort: {
+                    comments: -1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    comments: {
+                        $push: "$comments",
+                    },
+                },
+            },
+        ]).then((post) => {
+            // // console.log(post)
+            socket.emit("all_comments", post[0].comments, id);
+        });
     });
     // TODO will make posts be sent regularly
     /*
@@ -461,21 +521,24 @@ async function socketfunc(socket) {
      *sending event to different users
      */
     socket.on("post", async (user_id, description, image) => {
-        console.log(user_id, description, image);
+        // console.log(user_id, description, image);
         let post = new Post({
             uploader: user_id,
             description: description,
             media: Buffer.from(image).toString("base64"),
         });
-        // console.log(user.posts);
-        post.save();
+        // console.log(post.time)
+        post.save().then((post) => {
+            socket.emit("post_added", post);
+            // // console.log(post)
+        });
     });
     socket.on("liked", (uid, post_id, setReaction) => {
         Post.findOne({ _id: post_id }, "_id likes dislikes reactions")
             .exec()
             .then((document) => {
                 for (let i of document.reactions) {
-                    // console.log(i);
+                    // // console.log(i);
                     if (uid == i.uid) {
                         if (i.reaction == -1) {
                             document.dislikes -= 1;
@@ -486,7 +549,7 @@ async function socketfunc(socket) {
                         i.reaction = 1;
                         document.save().then(() => {
                             setReaction(1);
-                            console.log("savvyy???1");
+                            // console.log("savvyy???1");
                         });
                         return;
                     }
@@ -497,7 +560,7 @@ async function socketfunc(socket) {
                 document.likes += 1;
                 document.save().then(() => {
                     setReaction(1);
-                    console.log("savvy??");
+                    // console.log("savvy??");
                 });
             });
     });
@@ -506,14 +569,14 @@ async function socketfunc(socket) {
             .exec()
             .then((document) => {
                 for (let i of document.reactions) {
-                    // console.log(i);
+                    // // console.log(i);
                     if (uid == i.uid) {
                         if (i.reaction == 1) document.likes -= 1;
                         if (i.reaction != -1) document.dislikes += 1;
                         i.reaction = -1;
                         document.save().then(() => {
                             setReaction(-1);
-                            console.log("savved1");
+                            // console.log("savved1");
                         });
                         return;
                     }
@@ -524,7 +587,7 @@ async function socketfunc(socket) {
                 document.dislikes += 1;
                 document.save().then(() => {
                     setReaction(-1);
-                    console.log("savved");
+                    // console.log("savved");
                 });
             });
     });
@@ -567,7 +630,7 @@ async function socketfunc(socket) {
     // * i thought of using it instead of accessing db again or storing the data in a variable
     socket.on("add_friend", async (uid, friendid) => {
         if ((await friend_is_unique(uid, friendid)) == 1) {
-            console.log(onlineUsers);
+            // console.log(onlineUsers);
             User.findById(uid)
                 .exec()
                 .then((data) => {
@@ -588,7 +651,7 @@ async function socketfunc(socket) {
         } else {
             socket.emit("exist");
         }
-        console.log("friend:", friendid);
+        // console.log("friend:", friendid);
     });
     socket.on("search_user", (uname) => {
         const regex = new RegExp(uname, "i");
@@ -597,23 +660,26 @@ async function socketfunc(socket) {
             .limit(6)
             .exec()
             .then((users) => {
-                console.log(users);
+                // console.log(users);
                 socket.emit("searched_users", users);
             });
     });
 
-    socket.on("comment", (post_, commentor, comment) => {
+    socket.on("comment", (post, commentor, comment) => {
         comment = new Comment({
-            post: post_,
+            post: post,
             comment: comment,
             commentor: commentor,
         });
         comment.save().then((cmt) => {
-            Post.findByIdAndUpdate(post_, { $push: { comments: String(cmt._id) } }).exec();
-            console.log(cmt.comment);
-            socket.emit("comment_added",cmt);
+            Post.findByIdAndUpdate(post, { $push: { comments: String(cmt._id) } }).exec();
+            // console.log(post);
+            socket.emit("comment_added", cmt);
         });
     });
+    socket.on("profile", (id) => {
+        Post.aggregate()
+    })
 }
 
 module.exports = socketfunc;

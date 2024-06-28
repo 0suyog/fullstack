@@ -1,0 +1,45 @@
+"filename", "language", "JSON", "JavaScript", "CSS", "JavaScript JSX", "HTML", "XML", "comment", "blank", "total"
+"d:\fullstack\client\.eslintrc.cjs", "JavaScript", 0, -21, 0, 0, 0, 0, 0, -1, -22
+"d:\fullstack\client\index.html", "HTML", 0, 0, 0, 0, -14, 0, -2, -1, -17
+"d:\fullstack\client\package-lock.json", "JSON", -4333, 0, 0, 0, 0, 0, 0, -1, -4334
+"d:\fullstack\client\package.json", "JSON", -28, 0, 0, 0, 0, 0, 0, -1, -29
+"d:\fullstack\client\public\vite.svg", "XML", 0, 0, 0, 0, 0, -1, 0, 0, -1
+"d:\fullstack\client\src\App.jsx", "JavaScript JSX", 0, 0, 0, -76, 0, 0, -6, -6, -88
+"d:\fullstack\client\src\Comment\Comment.jsx", "JavaScript JSX", 0, 0, 0, -26, 0, 0, 0, -3, -29
+"d:\fullstack\client\src\Comment\Comment.module.css", "CSS", 0, 0, -32, 0, 0, 0, 0, -5, -37
+"d:\fullstack\client\src\Friendlist\friend_list.jsx", "JavaScript JSX", 0, 0, 0, -86, 0, 0, -4, -3, -93
+"d:\fullstack\client\src\Friendlist\friend_list.module.css", "CSS", 0, 0, -6, 0, 0, 0, 0, 0, -6
+"d:\fullstack\client\src\Login\login.jsx", "JavaScript JSX", 0, 0, 0, -40, 0, 0, -1, -7, -48
+"d:\fullstack\client\src\Post\post.jsx", "JavaScript JSX", 0, 0, 0, -146, 0, 0, -6, -9, -161
+"d:\fullstack\client\src\Post\post.module.css", "CSS", 0, 0, -25, 0, 0, 0, 0, -4, -29
+"d:\fullstack\client\src\Register\register.jsx", "JavaScript JSX", 0, 0, 0, -25, 0, 0, 0, -8, -33
+"d:\fullstack\client\src\commentSection\CommentSection.jsx", "JavaScript JSX", 0, 0, 0, -41, 0, 0, -17, -4, -62
+"d:\fullstack\client\src\commentSection\CommentSection.module.css", "CSS", 0, 0, -32, 0, 0, 0, -1, -4, -37
+"d:\fullstack\client\src\dropDown\dropdown.jsx", "JavaScript JSX", 0, 0, 0, -36, 0, 0, 0, -3, -39
+"d:\fullstack\client\src\dropDown\dropdown.module.css", "CSS", 0, 0, -3, 0, 0, 0, 0, -1, -4
+"d:\fullstack\client\src\index.css", "CSS", 0, 0, -61, 0, 0, 0, 0, -8, -69
+"d:\fullstack\client\src\main.jsx", "JavaScript JSX", 0, 0, 0, -9, 0, 0, 0, -2, -11
+"d:\fullstack\client\src\postContainer\post_container.jsx", "JavaScript JSX", 0, 0, 0, -153, 0, 0, -2, -9, -164
+"d:\fullstack\client\src\postContainer\post_container.module.css", "CSS", 0, 0, -6, 0, 0, 0, 0, -1, -7
+"d:\fullstack\client\src\reactionBtn\dislike_btn.jsx", "JavaScript JSX", 0, 0, 0, -46, 0, 0, -3, -2, -51
+"d:\fullstack\client\src\reactionBtn\like_btn.jsx", "JavaScript JSX", 0, 0, 0, -42, 0, 0, -2, -3, -47
+"d:\fullstack\client\src\reactionBtn\reaction.module.css", "CSS", 0, 0, -18, 0, 0, 0, 0, -3, -21
+"d:\fullstack\client\src\searchBox\search_box.jsx", "JavaScript JSX", 0, 0, 0, -30, 0, 0, 0, -6, -36
+"d:\fullstack\client\src\searchBox\search_box.module.css", "CSS", 0, 0, -13, 0, 0, 0, 0, -2, -15
+"d:\fullstack\client\src\socket.js", "JavaScript", 0, -2, 0, 0, 0, 0, -2, -2, -6
+"d:\fullstack\client\src\usernameWithProfile\username_with_pofile.jsx", "JavaScript JSX", 0, 0, 0, -20, 0, 0, 0, -3, -23
+"d:\fullstack\client\src\usernameWithProfile\username_with_profile.module.css", "CSS", 0, 0, -14, 0, 0, 0, -1, -2, -17
+"d:\fullstack\client\vite.config.js", "JavaScript", 0, -5, 0, 0, 0, 0, -1, -2, -8
+"d:\fullstack\server\database.js", "JavaScript", 0, 9, 0, 0, 0, 0, 0, 2, 11
+"d:\fullstack\server\index.js", "JavaScript", 0, 21, 0, 0, 0, 0, 0, 3, 24
+"d:\fullstack\server\middlewares\friends_validator.js", "JavaScript", 0, 14, 0, 0, 0, 0, 24, 3, 41
+"d:\fullstack\server\middlewares\user_validator.js", "JavaScript", 0, 1, 0, 0, 0, 0, 0, 2, 3
+"d:\fullstack\server\middlewares\verifying_online_stuff.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\fullstack\server\models\comment.model.js", "JavaScript", 0, 23, 0, 0, 0, 0, 0, 4, 27
+"d:\fullstack\server\models\post.model.js", "JavaScript", 0, 39, 0, 0, 0, 0, 0, 3, 42
+"d:\fullstack\server\models\reaction.model.js", "JavaScript", 0, 16, 0, 0, 0, 0, 0, 2, 18
+"d:\fullstack\server\models\users.model.js", "JavaScript", 0, 18, 0, 0, 0, 0, 0, 4, 22
+"d:\fullstack\server\package-lock.json", "JSON", 1936, 0, 0, 0, 0, 0, 0, 1, 1937
+"d:\fullstack\server\package.json", "JSON", 23, 0, 0, 0, 0, 0, 0, 1, 24
+"d:\fullstack\server\socket.handler.js", "JavaScript", 0, 610, 0, 0, 0, 0, 69, 12, 691
+"Total", "-", -2402, 723, -210, -776, -14, -1, 45, -68, -2703

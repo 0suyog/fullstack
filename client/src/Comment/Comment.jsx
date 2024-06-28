@@ -1,21 +1,23 @@
 import styles from "./Comment.module.css";
 import Comment_pic from "../assets/comment.png";
 import UserwProfile from "../usernameWithProfile/username_with_pofile";
-import { commentsContext } from "../App.jsx";
-import { useContext } from "react";
+
 function Comment_body({ comment, commentor, commentor_id }) {
     return (
-        <div          className = {styles.commentContainer}>
-        <UserwProfile uname     = {commentor} id = {commentor_id} />
-        <p            className = {styles.comment}>{comment}</p>
+        <div className={styles.commentContainer}>
+            <UserwProfile uname={commentor} id={commentor_id} />
+            <p className={styles.comment}>{comment}</p>
         </div>
     );
 }
-function Comment_button() {
-    const commentSectionFunction = useContext(commentsContext);
+function Comment_button(props) {
     return (
-        <button className = {styles.comment_btn} onClick={()=>commentSectionFunction.setShowComments(!commentSectionFunction.showComments)}>
-        <img    src       = {Comment_pic} alt = "comment icon" />
+        <button
+            className={styles.comment_btn}
+            onClick={() => {
+                props.setShowCommentSection(true);
+            }}>
+            <img src={Comment_pic} alt="comment icon" />
         </button>
     );
 }

@@ -11,7 +11,6 @@ function Like(props) {
         } else {
             setState(0);
         }
-        // console.log(state);
     });
     const likeBtn = (
         <button
@@ -33,7 +32,6 @@ function Like(props) {
                 props.setReaction(0);
                 setState(0);
                 props.setNoOfLikes(props.amount - 1);
-                console.log(props.amount);
             }}>
             <img src={like_btn} alt="Like button" />
             <span>{props.amount}</span>

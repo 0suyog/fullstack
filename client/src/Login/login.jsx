@@ -3,13 +3,9 @@ import socket from "../socket";
 
 function Login(props) {
   const [username, setUsername] = useState("");
-  function handleClick(event) {
-    props.func(true);
-  }
   
   function handleClick() {
     socket.emit("login", username, socket.id);
-    // console.log("meowww");
   }
   function handleChange(event) {
     setUsername(event.target.value);
@@ -24,10 +20,8 @@ function Login(props) {
     })
     return () => {
       socket.off("wrong_credentials", () => {
-        console.log("unmounted")
       })
       socket.off("logged_id", () => {
-        console.log("unmounted_")
       })
     }
   }

@@ -1,14 +1,12 @@
 import Like from "../reactionBtn/like_btn.jsx";
 import Dislike from "../reactionBtn/dislike_btn.jsx";
 import Comment from "../Comment/Comment.jsx";
-import Comment_section from "../commentSection/CommentSection.jsx";
 import styles from "./post.module.css";
 import Uname from "../usernameWithProfile/username_with_pofile.jsx";
 import socket from "../socket.js";
 import { forwardRef, useContext, useEffect, useState } from "react";
 import { commentsContext } from "../App.jsx";
 const Post = forwardRef((props, ref) => {
-    // console.log(props.reaction);
     const [reaction, setReaction] = useState(props.reaction);
     const [prevReaction, setPrevReaction] = useState(props.reaction);
     const [noOfLikes, setNoOfLikes] = useState(props.likes);
@@ -16,10 +14,19 @@ const Post = forwardRef((props, ref) => {
     const [twoComments, setTwoComments] = useState(props.comments.slice(0, 2));
     const [comments, setComments] = useState(props.comments);
     const commentSectionFunction = useContext(commentsContext);
-    const [showCommentSection,setShowCommentSection]=useState(false)
+    const [showCommentSection, setShowCommentSection] = useState(false);
     useEffect(() => {
-        commentSectionFunction.setComments({ comments: comments, postId: props.postId });
-    }, [commentSectionFunction.showComments,comments]);
+        if (showCommentSection) {
+            socket.emit("comments_of_post", props.postId);
+            console.log(props.postId);
+        }
+    }, [showCommentSection]);
+
+    useEffect(() => {
+        if (commentSectionFunction.showComments == false) {
+            setShowCommentSection(false);
+        }
+    }, [commentSectionFunction.showComments]);
     useEffect(() => {
         if (reaction != prevReaction) {
             if (prevReaction == 1 && reaction == -1) {
@@ -32,32 +39,39 @@ const Post = forwardRef((props, ref) => {
     }, [reaction]);
     useEffect(() => {
         socket.on("comment_added", (comment) => {
-            comment.commentor = {
-                name: localStorage.getItem("name"),
-                id: localStorage.getItem("id"),
-            };
-            setComments((comments) => {
-                return [comment, ...comments];
-            });
-            alert("add new comt in post");
+            console.log(props.postId, comment.post);
+            if (props.postId == comment.post) {
+                comment.commentor = {
+                    name: localStorage.getItem("name"),
+                    id: localStorage.getItem("id"),
+                };
+                commentSectionFunction.setComments((cmts) => [comment, ...cmts]);
+                setComments((comments) => {
+                    return [comment, ...comments];
+                });
+            }
+        });
+        socket.on("all_comments", (comments, postId) => {
+            commentSectionFunction.setComments(comments);
+            commentSectionFunction.setPostId(postId);
+            commentSectionFunction.setShowComments(true);
         });
         return () => {
             socket.off("comment_added");
+            socket.off("all_comments");
         };
     }, []);
     useEffect(() => {
         setTwoComments(comments.slice(0, 2));
     }, [comments]);
-    // function sendCommentToCommentSection() {
-    //     commentSectionFunction.s
-    // }
+
     return (
         <div className={styles.postContainer} ref={ref}>
             <Uname uname={props.uploader.name} />
             <p className={styles.description}>{props.description}</p>
             <img
                 src={`data:image/png;base64,${props.media}`}
-                alt="post image"
+                alt="post img"
                 className={styles.media}
             />
             <hr />
@@ -75,20 +89,20 @@ const Post = forwardRef((props, ref) => {
                 setReaction={setReaction}
                 setNoOfDislikes={setNoOfDislikes}
             />
-            <Comment.Comment_button />
+            <Comment.Comment_button setShowCommentSection={setShowCommentSection} />
             <div className={styles.twoComments}>
                 {twoComments.map((comment) => {
-                    return (
+                    return comment._id ? (
                         <Comment.Comment_body
                             comment={comment.comment}
                             commentor={comment.commentor.name}
                             commentor_id={comment.commentor.id}
                             key={comment._id}
                         />
-                    );
+                    ) : null;
                 })}
             </div>
-            {/* <Comment_section comments={props.comments} postId={props.postId} /> */}
+            {/* <CommentSection comments={props.comments} postId={props.postId} /> */}
         </div>
     );
 });
@@ -98,17 +112,14 @@ function PostButton({ onclick }) {
 }
 
 function PostingArea(props) {
-    console.log("props.uploader", props.uploader);
     const [description, setDescription] = useState("");
     const [image, setImage] = useState("");
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(props.uploader, description, image);
         socket.emit("post", props.uploader, description, image);
     }
 
     function handleChange(event, func) {
-        console.log(event.target.value);
         func(event.target.value);
     }
     function handleImageUpload(event) {
