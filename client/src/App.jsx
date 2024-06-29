@@ -9,6 +9,7 @@ import Dropdown from "./dropDown/dropdown.jsx";
 import CommentSection from "./commentSection/CommentSection.jsx";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import Profile from "./Profile/Profile.jsx"
+import { NewsFeed } from "../NewFeed/NewsFeed.jsx";
 export const commentsContext = createContext();
 function App() {
     const [uid, setUid] = useState(false);
@@ -52,11 +53,12 @@ function App() {
     return (
         <Routes>
             <Route path="/feed" element={
-                <div style={friend_liststyle}>
+                <>
+                {/* <div style={friend_liststyle}>
                 <div>
                     <SearchBox />
                     <Dropdown />
-                </div>
+                 </div> */}
                 <commentsContext.Provider
                     value={{
                         comments: comments,
@@ -66,23 +68,26 @@ function App() {
                         showComments: showComments,
                     }}>
                     {showComments ? <CommentSection comments={comments} postId={postId} /> : null}
-                    <PostContainer uid={uid} ref={postContainerRef} />
-                </commentsContext.Provider>
-                <Lists.friendlist uid={uid} />
-                <Lists.userlist uid={uid} />
-                <button
-                    onClick={() => {
-                        socket.emit("dummy_post", uid);
-                    }}
-                    style={{
-                        height: "10vh",
-                    }}>
-                    Dummy post
-                </button>
-            </div>
+            <NewsFeed/>
+                        </commentsContext.Provider>
+            </>
+                        
+            //        <PostContainer uid={uid} ref={postContainerRef} />
+            //     <Lists.friendlist uid={uid} />
+            //     <Lists.userlist uid={uid} />
+            //     <button
+            //         onClick={() => {
+            //             socket.emit("dummy_post", uid);
+            //         }}
+            //         style={{
+            //             height: "10vh",
+            //         }}>
+            //         Dummy post
+            //     </button>
+                // </div>
             }></Route>
             <Route path="/" index={true} element={
-              <>
+                <>
               <Register func={login} />
               <Login func={login} />
           </>  

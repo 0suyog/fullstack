@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import UserwProfile from "../usernameWithProfile/username_with_pofile.jsx";
 import socket from "../socket.js";
 import styles from "./friend_list.module.css";
-function UserList({ uid }) {
+import { useNavigate } from "react-router-dom";
+export function UserList({ uid }) {
     const [users, setUsers] = useState([]);
     useEffect(() => {
         socket.emit("sendall", uid);
@@ -32,14 +33,20 @@ function UserList({ uid }) {
         </div>
     );
 }
-function FriendList({ uid }) {
+export function FriendList(props) {
+    const navigate=useNavigate()
     const [friends, setFriends] = useState([]);
     useEffect(() => {
-        socket.emit("friend_list", localStorage.getItem("id"));
-        socket.on("friends", (friends) => {
-            setFriends(friends);
-        });
-        socket.on("no_friends", () => {});
+        // if (localStorage.getItem("id") != null)
+        // { socket.emit("friend_list", localStorage.getItem("id")); }
+        // else {
+        //     navigate("/")
+        // }
+        // socket.on("friends", (friends) => {
+        //     setFriends(friends);
+        // });
+        // socket.on("no_friends", () => {});
+
 
         socket.on("friend_added", (uid, name) => {
             let user = {
@@ -57,6 +64,16 @@ function FriendList({ uid }) {
             socket.off("friend added");
         };
     }, []);
+    useEffect(() => {
+        let noDuplicates = []
+        for (let i of props.friends) {
+            if (!(friends.some(friend => friend._id == i._id))) {
+                noDuplicates.push(i)
+            }
+        }
+        setFriends([...friends, ...noDuplicates])
+        console.log(friends)
+    },[props.friends])
     function viewProfile(friend) {
         console.log("we are gonna view profile of ", friend);
     }

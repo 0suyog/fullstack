@@ -622,7 +622,7 @@ async function socketfunc(socket) {
     // });
 
     socket.on("friend_list", async (uid) => {
-        data = await User.findOne({ _id: uid }).select("friends").populate("friends").exec();
+        data = await User.findOne({ _id: uid }).select("friends").populate({path:"friends",select:"-friends"}).exec();
         data.friends ? socket.emit("friends", data.friends) : socket.emit("no_friends");
     });
     // * event emition are swapped with the way the db is updated cuz

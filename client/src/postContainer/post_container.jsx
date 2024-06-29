@@ -6,7 +6,8 @@ import post from "../Post/post.jsx";
 import { useCallback } from "react";
 import LoadMore from "../../../loadMore/loadMore.jsx";
 import { useNavigate } from "react-router-dom";
-const PostContainer = forwardRef(({ uid }, ref) => {
+const PostContainer = forwardRef((props, ref) => {
+    const [receivedPosts, setReceivedPosts] = [props.posts];
     const [posts, setPosts] = useState([]);
     const [clicked, setClicked] = useState(0);
     const lastpost = useRef(null);
@@ -15,75 +16,55 @@ const PostContainer = forwardRef(({ uid }, ref) => {
         last_post_date: undefined,
     });
     const observer = useRef();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+
+    // * New code starts here
     useEffect(() => {
-        if (localStorage.getItem("id") != "undefined") {
-            socket.emit("initial_req", localStorage.getItem("id"));
-        }
-        else {
-            navigate("/")
+        let nonDuplicatePosts = [];
+        let exists = false;
+        console.log(posts);
+        for (let i of receivedPosts) {
+            let exists = posts.some((post) => {
+                return post._id == i._id;
+            });
+            if (!exists) {
+                nonDuplicatePosts.push(i);
+            }
         }
 
-        socket.on("initial_post", async (data) => {
-            setPosts(data);
-            console.log(data[0]);
-            data[0]
-                ? setDates({
-                      first_post_date: data[0].time,
-                      last_post_date: data[data.length - 1].time,
-                  })
-                : {};
-        });
-        socket.on("post_added", (post) => {
-            console.log(post);
-            setPosts((posts) => {
-                return [post, ...posts];
-            });
-        });
-        // ! this needs to be reworked once more because
-        // ! this doesnt handle the case of the new_last_post being greater than first post
-        // ! and this is a problem because if more than 10 new posts are added then only the top ten will be shown and
-        // ! rest will be ignored because last post will be the previous last post
-        socket.on("sending_more_posts", (data) => {
-            if (data.length) {
-                setPosts((posts) => [...posts, ...data]);
-                setDates((dates) => {
-                    let new_first_date = data[0].time;
-                    let new_last_date = data[data.length - 1].time;
-                    if (new Date(new_last_date) > new Date(dates.last_post_date)) {
-                        new_last_date = dates.last_post_date;
-                    }
-                    if (new Date(new_first_date) < new Date(dates.first_post_date)) {
-                        new_first_date = dates.first_post_date;
-                    }
-                    return {
-                        first_post_date: new_first_date,
-                        last_post_date: new_last_date,
-                    };
+        setPosts((posts) => [...posts, ...nonDuplicatePosts]);
+        nonDuplicatePosts = [];
+        if (dates["first_post_date"] == undefined) {
+            if (posts.length && props.posts.length) {
+                setDates({
+                    first_post_date: props.posts[0].time,
+                    last_post_date: props.posts[props.posts.length - 1].time,
                 });
             }
-        });
-        return () => {
-            socket.off("initial_post");
-            socket.off("sending_more_posts");
-            socket.off("post_added");
-        };
-    }, []);
-    useEffect(() => {
-        socket.on("friend_added", () => {
-            if (posts.length == 0) {
-                socket.emit("initial_req", localStorage.getItem("id"));
-            } else {
-                if (lastpost.current) {
-                    observer.current.disconnect();
-                    observer.current.observe(lastpost.current);
+        } else {
+            setDates((dates) => {
+                let new_first_date = props.posts[0].time;
+                let new_last_date = props.posts[props.posts.length - 1].time;
+                if (new Date(new_last_date) > new Date(dates.last_post_date)) {
+                    new_last_date = dates.last_post_date;
                 }
-            }
-        });
-        return () => {
-            socket.off("friend_added");
-        };
-    }, [dates]);
+                if (new Date(new_first_date) < new Date(dates.first_post_date)) {
+                    new_first_date = dates.first_post_date;
+                }
+                return {
+                    first_post_date: new_first_date,
+                    last_post_date: new_last_date,
+                };
+            });
+        }
+        return () => {};
+    }, [receivedPosts]);
+    useEffect(() => {
+        if (receivedPosts != props.posts) {
+            setReceivedPosts(props.posts);
+        }
+    }, [props.posts]);
+
     useEffect(() => {
         const options = {
             threshold: 0,
@@ -98,6 +79,7 @@ const PostContainer = forwardRef(({ uid }, ref) => {
                         dates.first_post_date,
                         dates.last_post_date
                     );
+                    alert(JSON.stringify(dates));
                     observer.current.disconnect();
                 }
             });
@@ -114,19 +96,19 @@ const PostContainer = forwardRef(({ uid }, ref) => {
 
     let posting_area = (
         <div className={styles.hiddenPostingArea}>
-            <Post.Posting_area uploader={uid} />
+            <Post.Posting_area uploader={localStorage.getItem("id")} />
         </div>
     );
     if (clicked)
         posting_area = (
             <div className={styles.hiddenPostingArea}>
-                <Post.Posting_area uploader={uid} />
+                <Post.Posting_area uploader={localStorage.getItem("id")} />
             </div>
         );
     else
         posting_area = (
             <div className={styles.PostingArea}>
-                <Post.Posting_area uploader={uid} />
+                <Post.Posting_area uploader={localStorage.getItem("id")} />
             </div>
         );
 
